@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# IDE
+.idea
+
+# GOOGLE AUTH DONT COMMIT
+secret.json
+client_secret.json
