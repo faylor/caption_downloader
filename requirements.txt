@@ -155,3 +155,5 @@ urllib3==1.26.2; python_version >= "3.6" and python_full_version < "3.0.0" or py
 werkzeug==1.0.1; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" \
     --hash=sha256:2de2a5db0baeae7b2d2664949077c2ac63fbd16d98da0ff71837f7d1dea3fd43 \
     --hash=sha256:6c80b1e5ad3665290ea39320b91e1be1e0d5f60652b964a3070216de83d2e47c
+json
+xmltodict
