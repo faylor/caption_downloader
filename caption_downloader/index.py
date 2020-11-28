@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-
+import urllib.parse
 import os
 import flask
 import requests
+import json
+import xmltodict
 import re
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
@@ -40,8 +42,15 @@ def test_captions(video):
         pattern = re.compile(pattern_string)
         m = pattern.search(response.text)
         if m is not None:
-            print(m.group(0))
-            return m.group(0)
+            caption_section = urllib.parse.unquote('"' + m.group(0), encoding="UTF8")
+            splits = caption_section.split('"')
+            if len(splits) > 4:
+              url_found = splits[5].replace("\\u0026","&") #TODO dodgy for now
+              response_xml = requests.get(url_found)
+              dictionary = xmltodict.parse(response_xml.text)
+              dictionary["regex_one"] = caption_section
+              dictionary["original_response"] = urllib.parse.unquote(response.text)
+              return json.dumps(dictionary)
         return flask.jsonify(response.text)
     return response.status_code
 
