@@ -41,16 +41,16 @@ def test_captions(video):
         pattern_string = re.escape(left_identifier) + "(.*?)" + re.escape(right_identifier)
         pattern = re.compile(pattern_string)
         m = pattern.search(response.text)
-        if m is not None:
-            caption_section = urllib.parse.unquote('"' + m.group(0), encoding="UTF8")
-            splits = caption_section.split('"')
-            if len(splits) > 4:
-              url_found = splits[5].replace("\\u0026","&") #TODO dodgy for now
-              response_xml = requests.get(url_found)
-              dictionary = xmltodict.parse(response_xml.text)
-              dictionary["regex_one"] = caption_section
-              dictionary["original_response"] = urllib.parse.unquote(response.text)
-              return json.dumps(dictionary)
+        parsed = urllib.parse.parse_qs(response.text)
+        dd = parsed["player_response"][0]
+        jj = json.loads(dd)
+        captions = jj["captions"]["playerCaptionsTracklistRenderer"]["captionTracks"]
+        video_details = jj["videoDetails"]
+        video_details["captions"] = captions
+        if len(captions) > 0 :
+            response_xml = requests.get(captions[0]["baseUrl"])
+            video_details["CaptionData"] = xmltodict.parse(response_xml.text)
+            return video_details
         return flask.jsonify(response.text)
     return response.status_code
 
