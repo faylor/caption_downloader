@@ -134,3 +134,4 @@ dmypy.json
 # GOOGLE AUTH DONT COMMIT
 secret.json
 client_secret.json
+tmp/*
