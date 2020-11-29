@@ -2,8 +2,10 @@
 import urllib.parse
 import os
 import flask
+import tempfile
 import requests
 import json
+import csv
 import xmltodict
 import re
 import google.oauth2.credentials
@@ -31,8 +33,8 @@ app.secret_key = 'sdfas2345tsrgtsdf'
 def index():
   return print_index_table()
 
-@app.route('/captions/<video>')
-def test_captions(video):
+@app.route('/json/<video>')
+def json_captions(video):
     info_url = "https://www.youtube.com/get_video_info?video_id=" + video #fU5X0cUMHac
     response = requests.get(info_url)
     if response.status_code == 200:
@@ -54,6 +56,43 @@ def test_captions(video):
         return flask.jsonify(response.text)
     return response.status_code
 
+
+@app.route('/csv/<video>')
+def csv_captions(video):
+    info_url = "https://www.youtube.com/get_video_info?video_id=" + video #fU5X0cUMHac
+    response = requests.get(info_url)
+    if response.status_code == 200:
+        left_identifier = "captionTracks"
+        right_identifier = "isTranslatable"
+        pattern_string = re.escape(left_identifier) + "(.*?)" + re.escape(right_identifier)
+        pattern = re.compile(pattern_string)
+        m = pattern.search(response.text)
+        parsed = urllib.parse.parse_qs(response.text)
+        dd = parsed["player_response"][0]
+        jj = json.loads(dd)
+        captions = jj["captions"]["playerCaptionsTracklistRenderer"]["captionTracks"]
+        video_details = jj["videoDetails"]
+        video_details["captions"] = captions
+        if len(captions) > 0 :
+            response_xml = requests.get(captions[0]["baseUrl"])
+            video_details["CaptionData"] = xmltodict.parse(response_xml.text)
+            
+            dir_path = os.path.dirname(os.path.realpath(__file__))
+            file_path = os.path.join(dir_path, 'data.csv')
+            try:
+              fields = list(video_details.keys())
+              print(fields)
+              with open(os.path.join(dir_path, 'data.csv'), 'w') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fields, quotechar='"', quoting=csv.QUOTE_NONNUMERIC,)
+                writer.writeheader()
+                writer.writerow(video_details)
+              return flask.send_from_directory(directory = dir_path,filename = 'data.csv')
+            except IOError:
+                print("I/O error")
+
+            
+        return flask.jsonify(response.text)
+    return response.status_code
 # @app.route('/test')
 # def test_api_request():
 #   if 'credentials' not in flask.session:
@@ -167,8 +206,10 @@ def credentials_to_dict(credentials):
 
 def print_index_table():
   return ('<table>' +
-          '<tr><td><a href="/captions/fU5X0cUMHac">Test an capture request</a></td>' +
-          '<td>Add Your Own To Test, Change Url to /captions/<video_id>.</td></tr>' +
+          '<tr><td><a href="/csv/fU5X0cUMHac">Get a CSV of Captions</a></td>' +
+          '<td>Add Your Own To Test, Change Url to /csv/<video_id>.</td></tr>' +
+          '<tr><td><a href="/json/fU5X0cUMHac">Get a JSON of Captions</a></td>' +
+          '<td>Add Your Own To Test, Change Url to /json/<video_id>.</td></tr>' +
           '</table>')
 
 
