@@ -2,7 +2,7 @@
 import urllib.parse
 import os
 import flask
-from flask import abort
+from flask import abort, request, redirect
 import tempfile
 import requests
 import json
@@ -30,9 +30,20 @@ app = flask.Flask(__name__)
 app.secret_key = 'sdfas2345tsrgtsdf'
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
+    errors = []
+    results = {}
+    if request.method == 'POST':
+        try:
+            url = request.form['url']
+            return redirect('csv/' + url)
+        except:
+            errors.append(
+                "Unable to get URL. Please make sure it's valid and try again."
+            )
     return print_index_table()
+
 
 
 @app.route('/json/<video>')
@@ -241,6 +252,11 @@ def print_index_table():
             '<td>Add Your Own To Test, Change Url to /csv/<video_id>.</td></tr>' +
             '<tr><td><a href="/json/CFmM-vXH5F4">Get a JSON of Captions</a></td>' +
             '<td>Add Your Own To Test, Change Url to /json/<video_id>.</td></tr>' +
+            '<div style="padding:50px"><form method="post">'
+            '<textarea name="url" style="width:600px; height: 200px; maxlength="4000"; display:none;" placeholder="dKHlY_grLDM,EQHb-ydSAV8,CFmM-vXH5F4,i1H8tuBLuWc,wMhex3CKC9c">' +
+            '</textarea></br>' +
+            '<input type="submit" name="comment101" value="Get CSV" />' +
+            '</form></div>' +
             '</table>')
 
 
