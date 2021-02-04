@@ -186,18 +186,23 @@ def sendTable(update, context):
 
 def prices(update, context):
     chat_id = update.message.chat_id
-    context.bot.send_message(chat_id=chat_id, text="Getting the stuffs")
-
     mains = ["BTC", "ETH", "LTC", "ADA", "AAVE", "DOGE"]
     out = ""
+    totes = 0
     for l in mains:
         p, c = get_price(l)
+        totes = totes + c
         context.bot.send_message(chat_id=chat_id, text=f"{l} ${round(p,4)} {round(c,1)}% 1 hour")
     
-    context.bot.send_message(chat_id=chat_id, text="Enjoy")
+    if totes<0:
+        context.bot.send_message(chat_id=chat_id, text="OUCH, NO LAMBO FOR YOU!")
+    elif totes>15:
+        context.bot.send_message(chat_id=chat_id, text="OK OK, LAMBO FOR YOU!")
+    else:
+        context.bot.send_message(chat_id=chat_id, text="MEH, MAYBE LAMBO. HODL.")
 
 def get_price(label):
-    price, change_1hr = "", ""
+    price, change_1hr = 0, 0
     logging.error("DOWNLOADING " + label)    
     try:
         url = "https://data.messari.io/api/v1/assets/" + label + "/metrics"
