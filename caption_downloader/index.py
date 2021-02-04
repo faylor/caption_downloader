@@ -206,6 +206,9 @@ def get_price(label):
         logging.error(e)
     return price, change_1hr
 
+def error_callback(bot, error):
+    logging.warning(str(error))
+
 
 updater = Updater(TOKEN)
 #call sendImage() when the user types a command in the telegram chat
@@ -213,6 +216,10 @@ updater.dispatcher.add_handler(CommandHandler('doge',sendImage))
 updater.dispatcher.add_handler(CommandHandler('me',sendTable))
 updater.dispatcher.add_handler(CommandHandler('lambo',prices))
 updater.dispatcher.add_handler(CommandHandler('greendildos',prices))
+
+# Register it to the updater's dispatcher
+updater.dispatcher.add_error_handler(error_callback)
+
 #start the bot
 updater.start_polling()
 updater.idle()
