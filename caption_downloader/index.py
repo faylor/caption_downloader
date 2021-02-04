@@ -191,7 +191,7 @@ def prices(update, context):
         p, c = get_price(l)
         out = out + f"_{l}_ ${round(p,4)} {round(c,1)}% 1 hour \n"
     chat_id = update.message.chat_id
-    context.bot.send_message(chat_id=chat_id, text=out, parse_mode=ParseMode.MARKDOWN_V2)
+    context.bot.send_message(chat_id=chat_id, text=out.replace(".", "\\."), parse_mode=ParseMode.MARKDOWN_V2)
 
 def get_price(label):
     price, change_1hr = "", ""
@@ -200,8 +200,8 @@ def get_price(label):
         url = "https://data.messari.io/api/v1/assets/" + label + "/metrics"
         resp = requests.get(url)
         js = resp.json()
-        price = js["data"]["market_data"]["price_usd"].replace(".", "\\.")
-        change_1hr = js["data"]["market_data"]["percent_change_usd_last_1_hour"].replace(".", "\\.")
+        price = js["data"]["market_data"]["price_usd"]
+        change_1hr = js["data"]["market_data"]["percent_change_usd_last_1_hour"]
     except Exception as e:
         logging.error(e)
     return price, change_1hr
