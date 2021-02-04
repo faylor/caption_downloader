@@ -185,12 +185,15 @@ def sendTable(update, context):
         update.message.reply_text(f'Hello {update.effective_user.first_name}, you are HODLing strong')
 
 def prices(update, context):
+    chat_id = update.message.chat_id
+    context.bot.send_message(chat_id=chat_id, text="Getting the stuffs")
+
     mains = ["BTC", "ETH", "LTC", "ADA", "AAVE", "DOGE"]
     out = ""
     for l in mains:
         p, c = get_price(l)
         out = out + f"_{l}_ ${round(p,4)} {round(c,1)}% 1 hour \n"
-    chat_id = update.message.chat_id
+    
     context.bot.send_message(chat_id=chat_id, text=out.replace(".", "\\."), parse_mode=ParseMode.MARKDOWN_V2)
 
 def get_price(label):
