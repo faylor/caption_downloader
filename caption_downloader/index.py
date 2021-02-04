@@ -5,6 +5,7 @@ import flask
 from flask import abort, request, redirect
 import tempfile
 import requests
+import logging
 import json
 import csv
 import xmltodict
@@ -193,11 +194,16 @@ def prices(update, context):
     context.bot.send_message(chat_id=chat_id, text=out, parse_mode=ParseMode.HTML)
 
 def get_price(label):
-    url = "https://data.messari.io/api/v1/assets/" + label + "/metrics"
-    resp = requests.get(url)
-    js = resp.json()
-    price = js["data"]["market_data"]["price_usd"]
-    change_1hr = js["data"]["market_data"]["percent_change_usd_last_1_hour"]
+    price, change_1hr = "", ""
+    logging.error("DOWNLOADING " + l)    
+    try:
+        url = "https://data.messari.io/api/v1/assets/" + label + "/metrics"
+        resp = requests.get(url)
+        js = resp.json()
+        price = js["data"]["market_data"]["price_usd"]
+        change_1hr = js["data"]["market_data"]["percent_change_usd_last_1_hour"]
+    except Exception as e:
+        logging.error(e)
     return price, change_1hr
 
 
