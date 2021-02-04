@@ -186,7 +186,7 @@ def sendTable(update, context):
 
 def prices(update, context):
     chat_id = update.message.chat_id
-    mains = ["BTC", "ETH", "LTC", "ADA", "AAVE", "DOGE"]
+    mains = ["BTC", "ETH", "GRT", "LTC", "ADA", "AAVE", "DOGE"]
     out = ""
     totes = 0
     for l in mains:
