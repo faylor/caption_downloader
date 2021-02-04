@@ -38,7 +38,8 @@ def start_elon():
     updater = Updater(TOKEN)
     #call sendImage() when the user types a command in the telegram chat
     updater.dispatcher.add_handler(CommandHandler('doge',sendImage))
-    updater.dispatcher.add_handler(CommandHandler('weekly',sendTable))
+    updater.dispatcher.add_handler(CommandHandler('me',sendTable))
+    updater.dispatcher.add_handler(CommandHandler('lambo',sendTable))
     #start the bot
     updater.start_polling()
     updater.idle()
@@ -189,6 +190,18 @@ def sendTable(update, context):
         update.message.reply_text(f'Hello {update.effective_user.first_name}, you are Jelly Hands')
     else:
         update.message.reply_text(f'Hello {update.effective_user.first_name}, you are HODLing strong')
+
+def prices(update, context):
+    url = "https://data.messari.io/api/v1/assets/btc/metrics"
+    resp = requests.get(url)
+    js = resp.json()
+    price_1 = js["data"]["market_data"]["price_usd"]
+    url = "https://data.messari.io/api/v1/assets/eth/metrics"
+    resp = requests.get(url)
+    js = resp.json()
+    price_2 = js["data"]["market_data"]["price_usd"]
+    update.message.reply_text(f'BTC {price_1}, ETH {price_2}')
+
 
 if __name__ == '__main__':
     # When running locally, disable OAuthlib's HTTPs verification.
