@@ -35,14 +35,7 @@ TOKEN = os.environ["TELEGRAM_BOT"]
 
 @app.route('/elon/start', methods=['GET', 'POST'])
 def start_elon():
-    updater = Updater(TOKEN)
-    #call sendImage() when the user types a command in the telegram chat
-    updater.dispatcher.add_handler(CommandHandler('doge',sendImage))
-    updater.dispatcher.add_handler(CommandHandler('me',sendTable))
-    updater.dispatcher.add_handler(CommandHandler('lambo',prices))
-    #start the bot
-    updater.start_polling()
-    updater.idle()
+    
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -201,6 +194,16 @@ def prices(update, context):
     js = resp.json()
     price_2 = js["data"]["market_data"]["price_usd"]
     update.message.reply_text(f'BTC {price_1}, ETH {price_2}')
+
+updater = Updater(TOKEN)
+#call sendImage() when the user types a command in the telegram chat
+updater.dispatcher.add_handler(CommandHandler('doge',sendImage))
+updater.dispatcher.add_handler(CommandHandler('me',sendTable))
+updater.dispatcher.add_handler(CommandHandler('lambo',prices))
+updater.dispatcher.add_handler(CommandHandler('greendildos',prices))
+#start the bot
+updater.start_polling()
+updater.idle()
 
 
 if __name__ == '__main__':
