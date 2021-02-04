@@ -31,7 +31,7 @@ app = flask.Flask(__name__)
 app.secret_key = 'sdfas2345tsrgtsdf'
 
 # TOKEN var for elon_bot
-TOKEN = os.environ("TELEGRAM_BOT")
+TOKEN = os.environ["TELEGRAM_BOT"]
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
