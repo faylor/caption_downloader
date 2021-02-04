@@ -177,10 +177,10 @@ def getUrl():
     url = js[0]["url"]
     return url
 
-def sendImage(bot, update):
+def sendImage(update: Update, context: CallbackContext):
     url = getUrl()
     chat_id = update.message.chat_id
-    bot.send_photo(chat_id=chat_id, image=url)
+    context.bot.send_photo(chat_id=chat_id, image=url)
 
 if __name__ == '__main__':
     # When running locally, disable OAuthlib's HTTPs verification.
