@@ -189,9 +189,9 @@ def prices(update, context):
     out = ""
     for l in mains:
         p, c = get_price(l)
-        out = out + f"<p><b>{l} </b>${round(p,4)} {round(c,1)}% 1 hour<p/>"
+        out = out + f"_{l}_ ${round(p,4)} {round(c,1)}% 1 hour \n"
     chat_id = update.message.chat_id
-    context.bot.send_message(chat_id=chat_id, text=out, parse_mode=ParseMode.HTML)
+    context.bot.send_message(chat_id=chat_id, text=out, parse_mode=ParseMode.MARKDOWN_V2)
 
 def get_price(label):
     price, change_1hr = "", ""
