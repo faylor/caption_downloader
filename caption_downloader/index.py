@@ -188,7 +188,7 @@ def prices(update, context):
         p, c = get_price(l)
         out = out + f"<b/>{l} </b>${round(p,4)} {round(c,1)}% 1 hour<br/>"
     chat_id = update.message.chat_id
-    context.bot.send_message(chat_id=chat_id, parse_mode=out)
+    context.bot.send_message(chat_id=chat_id, text=out, parse_mode="HTML")
 
 def get_price(label):
     url = "https://data.messari.io/api/v1/assets/" + label + "/metrics"
