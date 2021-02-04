@@ -33,6 +33,15 @@ app.secret_key = 'sdfas2345tsrgtsdf'
 # TOKEN var for elon_bot
 TOKEN = os.environ["TELEGRAM_BOT"]
 
+@app.route('/elon/start', methods=['GET', 'POST'])
+def start_elon():
+    updater = Updater(TOKEN)
+    #call sendImage() when the user types a command in the telegram chat
+    updater.dispatcher.add_handler(CommandHandler('doge',sendImage))
+    #start the bot
+    updater.start_polling(timeout=1000)
+    updater.idle()
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     errors = []
@@ -179,12 +188,6 @@ if __name__ == '__main__':
     #     When running in production *do not* leave this option enabled.
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
-    updater = Updater(TOKEN)
-    #call sendImage() when the user types a command in the telegram chat
-    updater.dispatcher.add_handler(CommandHandler('doge',sendImage))
-    #start the bot
-    updater.start_polling(timeout=1000)
-    updater.idle()
 
     # Specify a hostname and port that are set as a valid redirect URI
     # for your API project in the Google API Console.
