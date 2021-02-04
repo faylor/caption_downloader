@@ -12,7 +12,7 @@ import re
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
-from telegram.ext import Update, CallbackContext, Updater, CommandHandler
+from telegram.ext import Updater, CommandHandler
 
 # This variable specifies the name of a file that contains the OAuth 2.0
 # information for this application, including its client_id and client_secret.
@@ -177,7 +177,7 @@ def getUrl():
     url = js[0]["url"]
     return url
 
-def sendImage(update: Update, context: CallbackContext):
+def sendImage(update, context):
     url = getUrl()
     chat_id = update.message.chat_id
     context.bot.send_photo(chat_id=chat_id, image=url)
