@@ -38,6 +38,7 @@ def start_elon():
     updater = Updater(TOKEN)
     #call sendImage() when the user types a command in the telegram chat
     updater.dispatcher.add_handler(CommandHandler('doge',sendImage))
+    updater.dispatcher.add_handler(CommandHandler('weekly',sendTable))
     #start the bot
     updater.start_polling()
     updater.idle()
@@ -181,6 +182,13 @@ def sendImage(update, context):
     url = getUrl()
     chat_id = update.message.chat_id
     context.bot.send_photo(chat_id=chat_id, photo=url)
+
+def sendTable(update, context):
+    name = update.effective_user.first_name
+    if "josh" in name.lower():
+        update.message.reply_text(f'Hello {update.effective_user.first_name}, you are Jelly Hands')
+    else:
+        update.message.reply_text(f'Hello {update.effective_user.first_name}, you are HODLing strong')
 
 if __name__ == '__main__':
     # When running locally, disable OAuthlib's HTTPs verification.
