@@ -39,7 +39,7 @@ def start_elon():
     #call sendImage() when the user types a command in the telegram chat
     updater.dispatcher.add_handler(CommandHandler('doge',sendImage))
     updater.dispatcher.add_handler(CommandHandler('me',sendTable))
-    updater.dispatcher.add_handler(CommandHandler('lambo',sendTable))
+    updater.dispatcher.add_handler(CommandHandler('lambo',prices))
     #start the bot
     updater.start_polling()
     updater.idle()
