@@ -172,7 +172,7 @@ def getUrl():
     #obtain a json object with image details
     #extract image url from the json object
     contents = requests.get('https://api.thecatapi.com/v1/images/search')
-    js = json.loads(contents)
+    js = contents.json()
     print(js)
     url = js["url"]
     return url
