@@ -33,9 +33,6 @@ app.secret_key = 'sdfas2345tsrgtsdf'
 # TOKEN var for elon_bot
 TOKEN = os.environ["TELEGRAM_BOT"]
 
-@app.route('/elon/start', methods=['GET', 'POST'])
-def start_elon():
-    
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
