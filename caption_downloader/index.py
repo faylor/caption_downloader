@@ -13,6 +13,7 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 from telegram.ext import Updater, CommandHandler
+from telegram.ParseMode import HTML
 
 # This variable specifies the name of a file that contains the OAuth 2.0
 # information for this application, including its client_id and client_secret.
@@ -188,7 +189,7 @@ def prices(update, context):
         p, c = get_price(l)
         out = out + f"<b/>{l} </b>${round(p,4)} {round(c,1)}% 1 hour<br/>"
     chat_id = update.message.chat_id
-    context.bot.send_message(chat_id=chat_id, text=out, parse_mode="HTML")
+    context.bot.send_message(chat_id=chat_id, text=out, parse_mode=HTML)
 
 def get_price(label):
     url = "https://data.messari.io/api/v1/assets/" + label + "/metrics"
