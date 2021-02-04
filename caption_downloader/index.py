@@ -195,7 +195,7 @@ def prices(update, context):
 
 def get_price(label):
     price, change_1hr = "", ""
-    logging.error("DOWNLOADING " + l)    
+    logging.error("DOWNLOADING " + label)    
     try:
         url = "https://data.messari.io/api/v1/assets/" + label + "/metrics"
         resp = requests.get(url)
