@@ -182,15 +182,21 @@ def sendTable(update, context):
         update.message.reply_text(f'Hello {update.effective_user.first_name}, you are HODLing strong')
 
 def prices(update, context):
-    url = "https://data.messari.io/api/v1/assets/btc/metrics"
+    mains = ["BTC", "ETH", "LTC", "ADA", "AAVE", "DOGE"]
+    out = ""
+    for l in mains:
+        p, c = get_price(l)
+        out = out + f"<b/>{l} </b>${round(p,4)} {round(c,1)}% 1 hour<br/>"
+    update.message.reply_text(out)
+
+def get_price(label):
+    url = "https://data.messari.io/api/v1/assets/" + label + "/metrics"
     resp = requests.get(url)
     js = resp.json()
-    price_1 = js["data"]["market_data"]["price_usd"]
-    url = "https://data.messari.io/api/v1/assets/eth/metrics"
-    resp = requests.get(url)
-    js = resp.json()
-    price_2 = js["data"]["market_data"]["price_usd"]
-    update.message.reply_text(f'BTC {price_1}, ETH {price_2}')
+    price = js["data"]["market_data"]["price_usd"]
+    change_1hr = js["data"]["market_data"]["percent_change_usd_last_1_hour"]
+    return price, change_1hr
+
 
 updater = Updater(TOKEN)
 #call sendImage() when the user types a command in the telegram chat
