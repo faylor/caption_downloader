@@ -174,7 +174,7 @@ def getUrl():
     contents = requests.get('https://api.thecatapi.com/v1/images/search')
     js = contents.json()
     print(js)
-    url = js["url"]
+    url = js[0]["url"]
     return url
 
 def sendImage(bot, update):
