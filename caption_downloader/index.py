@@ -200,8 +200,8 @@ def get_price(label):
         url = "https://data.messari.io/api/v1/assets/" + label + "/metrics"
         resp = requests.get(url)
         js = resp.json()
-        price = js["data"]["market_data"]["price_usd"]
-        change_1hr = js["data"]["market_data"]["percent_change_usd_last_1_hour"]
+        price = js["data"]["market_data"]["price_usd"].replace(".", "\\.")
+        change_1hr = js["data"]["market_data"]["percent_change_usd_last_1_hour"].replace(".", "\\.")
     except Exception as e:
         logging.error(e)
     return price, change_1hr
